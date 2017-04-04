@@ -1,12 +1,6 @@
 package client;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,9 +10,7 @@ import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.text.DefaultCaret;
 
-import logic.Message;
-
-public class ChatPanelView extends JPanel implements ActionListener {
+public class ChatPanelView extends AbstractView {
     /**
      * 
      */
@@ -31,11 +23,8 @@ public class ChatPanelView extends JPanel implements ActionListener {
     private JTextField textMessageField;
     private JButton logoutButton;
     
-    private AtomicInteger id;
-
     public ChatPanelView(ChatMessangerAppl chatMessageAppl) {
         this.parent = chatMessageAppl;
-        id = new AtomicInteger(0);
         initialize();
     }
 
@@ -56,7 +45,7 @@ public class ChatPanelView extends JPanel implements ActionListener {
             logoutButton.setText("Выйти");
             logoutButton.setName("logoutButton");
             logoutButton.setActionCommand("logout");
-            logoutButton.addActionListener(this);
+            logoutButton.addActionListener(parent.getController());
         }
         return logoutButton;
     }
@@ -78,7 +67,7 @@ public class ChatPanelView extends JPanel implements ActionListener {
         panel.add(textField, BorderLayout.CENTER);
     }
 
-    private JTextField getTextMessageField() {
+    JTextField getTextMessageField() {
         if (textMessageField == null) {
             textMessageField = new JTextField(12);
             textMessageField.setName("textMessageField");
@@ -92,7 +81,7 @@ public class ChatPanelView extends JPanel implements ActionListener {
             sendMessageButton.setText("Отправить");
             sendMessageButton.setName("sendMessageButton");
             sendMessageButton.setActionCommand("send");
-            sendMessageButton.addActionListener(this);
+            sendMessageButton.addActionListener(parent.getController());
         }
         return sendMessageButton;
     }
@@ -119,8 +108,6 @@ public class ChatPanelView extends JPanel implements ActionListener {
             messagesTextPane.setContentType("text/html");
             messagesTextPane.setName("messageTextArea");
             ((DefaultCaret) messagesTextPane.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-//            messagesTextArea
-//                    .setText("\n\n\n\n\n\n1\n\n\n\n\n\n\n4\n\n\n\n\n\n\n\n\n\n\n\n\n9\n\n\n\n\n\n\n\n\n\n\n\n\n\n10\n");
         }
         return messagesTextPane;
     }
@@ -131,36 +118,8 @@ public class ChatPanelView extends JPanel implements ActionListener {
         getMessagesTextPane().setText(parent.getModel().getMessages());
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        try {
-            doAction(e);
-        } catch (ParseException e1) {
-            return;
-        }
-        clearFields();
-        this.setVisible(false);
-        parent.showLoginPanelView();
-    }
-
-    private void clearFields() {
+    public void clearFields() {
         getMessagesTextPane().setText("");
         getTextMessageField().setText("");
-    }
-
-    private void doAction(ActionEvent e) throws ParseException {
-        if ("send".equals(e.getActionCommand())) {
-            parent.getModel().setCurrentMessageText(this.getTextMessageField().getText());
-            // отправить на сервер
-            parent.getModel().addMessage(new Message(new Long(id.incrementAndGet()), this.getTextMessageField().getText(), parent.getModel().getCurrentUser(), "", Calendar.getInstance()));
-            // сообщение вьюхе об изменении
-            getMessagesTextPane().setText("<html>" + parent.getModel().getMessages() + "</html>");
-            getTextMessageField().setText("");
-            throw new ParseException("send op", 0);
-        } else
-        if ("logout".equals(e.getActionCommand())) {
-            parent.setModel(new Model());
-        } else
-            throw new ParseException("no operation", 0);
     }
 }

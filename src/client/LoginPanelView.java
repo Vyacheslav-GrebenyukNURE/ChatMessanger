@@ -2,18 +2,13 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.ParseException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.apache.commons.validator.routines.EmailValidator;
-
-public class LoginPanelView extends JPanel implements ActionListener{
+public class LoginPanelView extends AbstractView{
     /**
      * 
      */
@@ -25,6 +20,20 @@ public class LoginPanelView extends JPanel implements ActionListener{
     private JTextField userNameField;
     private JLabel errorLable;
 
+    /**
+     * @return the mainPanel
+     */
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+    
+    /**
+     * @param mainPanel the mainPanel to set
+     */
+    public void setMainPanel(JPanel mainPanel) {
+        this.mainPanel = mainPanel;
+    }
+    
     public LoginPanelView(ChatMessangerAppl chatMessageAppl) {
         this.parent = chatMessageAppl;
         initialize();        
@@ -61,50 +70,19 @@ public class LoginPanelView extends JPanel implements ActionListener{
             loginButton.setText("Зарегистрироваться");
             loginButton.setName("loginButton");
             loginButton.setActionCommand("login");
-            loginButton.addActionListener(this);
+            loginButton.addActionListener(parent.getController());
         }
         return loginButton;
     }   
     
-    private JTextField getUserNameField() {
+    JTextField getUserNameField() {
         if (userNameField == null) {
             userNameField = new JTextField(12);
             userNameField.setName("userNameField");
         }
         return userNameField;
     }
-/**
- * Controller
- */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        try {
-            doAction(e);
-        } catch (ParseException e1) {
-            return;
-        }
-        clearFields();
-        this.setVisible(false);
-        parent.showChatPanelView();
-    }
-
-    private void doAction(ActionEvent e) throws ParseException {
-        if ("login".equals(e.getActionCommand())){
-//            if (getUserNameField().getText().length() == 0) {
-            if (! EmailValidator.getInstance().isValid(getUserNameField().getText())){
-                this.setVisible(false);
-                mainPanel.add(getErrorLable(), BorderLayout.SOUTH);
-                this.setVisible(true);
-                this.repaint();
-                throw new ParseException("No valid user name", 0);
-            } else {
-                parent.getModel().setCurrentUser(getUserNameField().getText());
-            }
-        } else 
-            throw new ParseException("No command", 0);
-    }
-    
-    private JLabel getErrorLable() {
+    JLabel getErrorLable() {
         if (errorLable == null){
             errorLable = new JLabel("Имя не введено или введено не верно");
             errorLable.setForeground(Color.red);
@@ -116,7 +94,7 @@ public class LoginPanelView extends JPanel implements ActionListener{
         parent.getModel().setCurrentUser("");
     }
     
-    private void clearFields() {
+    public void clearFields() {
         getErrorLable().setVisible(false);
         getUserNameField().setText("");
     }

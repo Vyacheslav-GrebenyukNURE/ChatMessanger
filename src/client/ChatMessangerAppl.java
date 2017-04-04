@@ -14,7 +14,8 @@ public class ChatMessangerAppl extends JFrame{
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 400;
 
-    private Model model; 
+    private Model model;
+    private Controller controller;
     private JPanel contentPanel;
     private JPanel loginPanelView;
     private JPanel chatPanelView;
@@ -32,6 +33,7 @@ public class ChatMessangerAppl extends JFrame{
 
     private void initialize() {
         model = new Model();
+        controller = new Controller(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         this.setLocationRelativeTo(null);
@@ -51,6 +53,20 @@ public class ChatMessangerAppl extends JFrame{
      */
     public void setModel(Model model) {
         this.model = model;
+    }
+
+    /**
+     * @return the controller
+     */
+    public Controller getController() {
+        return controller;
+    }
+
+    /**
+     * @param controller the controller to set
+     */
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 
     private Container getContentPanel() {
