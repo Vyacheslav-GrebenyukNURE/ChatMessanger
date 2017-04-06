@@ -44,9 +44,9 @@ public class LoginPanelView extends AbstractView{
             loginPanel = new JPanel();
             loginPanel.setLayout(new BorderLayout());
             loginPanel.add(getMainPanel(), BorderLayout.NORTH);
-            // Добавить поле с меткой. При необходимости можно добавить другие поля,
-            // например, пароль или адрес сервера             
-            addLabeledField(getMainPanel(), "Введите имя (адрес е-почты)", getUserNameField()); 
+            // Р·РґРµСЃСЊ РјРѕР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ РїР°СЂС‹ РїРѕР»РµР№ РІРІРѕРґР° РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹С… РґР°РЅРЅС‹С… Рё РјРµС‚РѕРє,
+            // РЅР°РїСЂРёРјРµСЂ, РїРѕР»Рµ РІРІРѕРґР° Р°РґСЂРµСЃР° СЃРµСЂРІРµСЂР°             
+            addLabeledField(getMainPanel(), "Р’РІРµРґРёС‚Рµ РёРјСЏ (Р°РґСЂРµСЃ Рµ-РїРѕС‡С‚С‹)", getUserNameField()); 
             loginPanel.add(getLoginButton(), BorderLayout.SOUTH);            
         }
         return loginPanel;
@@ -63,7 +63,7 @@ public class LoginPanelView extends AbstractView{
     private JButton getLoginButton() {
         if (loginButton == null) {
             loginButton = new JButton();
-            loginButton.setText("Зарегистрироваться");
+            loginButton.setText("Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ");
             loginButton.setName("loginButton");
             loginButton.setActionCommand("login");
             loginButton.addActionListener(parent.getController());
@@ -80,7 +80,7 @@ public class LoginPanelView extends AbstractView{
     }
     JLabel getErrorLable() {
         if (errorLable == null){
-            errorLable = new JLabel("Имя не введено или введено не верно");
+            errorLable = new JLabel("РРјСЏ РЅРµ РІРІРµРґРµРЅРѕ РёР»Рё РІРІРµРґРµРЅРѕ РЅРµ РІРµСЂРЅРѕ");
             errorLable.setForeground(Color.red);
         }
         return errorLable;

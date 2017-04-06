@@ -54,10 +54,10 @@ public class Controller implements ActionListener {
         if ("send".equals(comm)) {
             ChatPanelView view = ((ChatPanelView)findParent((Component)e.getSource(), ChatPanelView.class));
             parent.getModel().setCurrentMessageText(view.getTextMessageField().getText());
-            // отправить на сервер
+            // РѕС‚РїСЂР°РІРёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ РЅР° СЃРµСЂРІРµСЂ
             parent.getModel().addMessage(
                     new Message(Long.valueOf(id.incrementAndGet()), view.getTextMessageField().getText(), parent.getModel().getCurrentUser(), "", Calendar.getInstance()));
-            // сообщение вьюхе об изменении
+            // РїРѕР»СѓС‡РёС‚СЊ РѕР±РЅРѕРІР»РµРЅРёСЏ Рё РІС‹Р·РІР°С‚СЊ РЅРѕС‚РёС„РёРєР°С†РёСЋ
             view.getMessagesTextPane().setText("<html>" + parent.getModel().getMessages() + "</html>");
             view.getTextMessageField().setText("");
             throw new ParseException("send op", 0);

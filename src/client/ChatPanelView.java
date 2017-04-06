@@ -34,7 +34,7 @@ public class ChatPanelView extends AbstractView {
         this.setName("chatPanelView");
         this.setLayout(new BorderLayout());
         JPanel header = new JPanel(new BorderLayout());
-        header.add(new JLabel("Привет, " + parent.getModel().getCurrentUser() + "!"), BorderLayout.WEST);
+        header.add(new JLabel("РџСЂРёРІРµС‚, " + parent.getModel().getCurrentUser() + "!"), BorderLayout.WEST);
         header.add(getLogoutButton(), BorderLayout.EAST);
         this.add(header, BorderLayout.NORTH);
         this.add(getMessagesListPanel(), BorderLayout.CENTER);
@@ -44,7 +44,7 @@ public class ChatPanelView extends AbstractView {
     private JButton getLogoutButton() {
         if (logoutButton == null) {
             logoutButton = new JButton();
-            logoutButton.setText("Выйти");
+            logoutButton.setText("Р’С‹Р№С‚Рё");
             logoutButton.setName("logoutButton");
             logoutButton.setActionCommand("logout");
             logoutButton.addActionListener(parent.getController());
@@ -56,7 +56,7 @@ public class ChatPanelView extends AbstractView {
         if (textMessagePanel == null) {
             textMessagePanel = new JPanel();
             textMessagePanel.setLayout(new BoxLayout(textMessagePanel, BoxLayout.X_AXIS));
-            addLabeledField(textMessagePanel, "Введите сообщение", getTextMessageField());
+            addLabeledField(textMessagePanel, "Р’РІРµРґРёС‚Рµ СЃРѕРѕР±С‰РµРЅРёРµ", getTextMessageField());
             textMessagePanel.add(getSendMessageButton(), BorderLayout.EAST);
         }
         return textMessagePanel;
@@ -73,7 +73,7 @@ public class ChatPanelView extends AbstractView {
     private JButton getSendMessageButton() {
         if (sendMessageButton == null) {
             sendMessageButton = new JButton();
-            sendMessageButton.setText("Отправить");
+            sendMessageButton.setText("РћС‚РїСЂР°РІРёС‚СЊ");
             sendMessageButton.setName("sendMessageButton");
             sendMessageButton.setActionCommand("send");
             sendMessageButton.addActionListener(parent.getController());
@@ -109,7 +109,7 @@ public class ChatPanelView extends AbstractView {
 
     public void initModel() {
         parent.getModel().setCurrentMessageText("");
-        // получить с сервера начальный список сообщений
+        // РџРѕР»СѓС‡РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ СЃ СЃРµСЂРІРµСЂР°
         getMessagesTextPane().setText(parent.getModel().getMessages());
     }
 
