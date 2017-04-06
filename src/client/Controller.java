@@ -1,20 +1,17 @@
 package client;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
-import logic.Message;
-
 public class Controller implements ActionListener {
     private ChatMessangerAppl parent;
     private Command command;
+    // Необходимо для демонстрации работы без сервера
     private AtomicInteger id;
 
     public Controller(ChatMessangerAppl chatMessangerAppl) {
@@ -29,53 +26,31 @@ public class Controller implements ActionListener {
         } catch (ParseException e1) {
             return;
         }
-        AbstractView view = ((AbstractView)findParent((Component)e.getSource(), AbstractView.class)); 
-        view.clearFields();
-        view.setVisible(false);
         command.execute();
     }
 
     private void doAction(ActionEvent e) throws ParseException {
         String comm = e.getActionCommand();
         if ("login".equals(comm)){
-            LoginPanelView view = ((LoginPanelView)findParent((Component)e.getSource(), LoginPanelView.class));
+            LoginPanelView view = ((LoginPanelView)Utility.findParent((Component)e.getSource(), LoginPanelView.class));
             if (! EmailValidator.getInstance().isValid(view.getUserNameField().getText())){
-                view.setVisible(false);
-                view.getMainPanel().add(view.getErrorLable());
-                view.getErrorLable().setVisible(true);
-                view.setVisible(true);
-                view.repaint();
-                throw new ParseException("No valid user name", 0);
+                command = new LoginErrorCommand(parent, view);
             } else {
                 parent.getModel().setCurrentUser(view.getUserNameField().getText());
-                command = new ShowChatViewCommand(parent);
+                command = new ShowChatViewCommand(parent, view);
             }
         } else
         if ("send".equals(comm)) {
-            ChatPanelView view = ((ChatPanelView)findParent((Component)e.getSource(), ChatPanelView.class));
+            ChatPanelView view = ((ChatPanelView)Utility.findParent((Component)e.getSource(), ChatPanelView.class));
             parent.getModel().setCurrentMessageText(view.getTextMessageField().getText());
-            // отправить сообщение на сервер
-            parent.getModel().addMessage(
-                    new Message(Long.valueOf(id.incrementAndGet()), view.getTextMessageField().getText(), parent.getModel().getCurrentUser(), "", Calendar.getInstance()));
-            // получить обновления и вызвать нотификацию
-            view.getMessagesTextPane().setText("<html>" + parent.getModel().getMessages() + "</html>");
-            view.getTextMessageField().setText("");
-            throw new ParseException("send op", 0);
+            command = new SendMessageCommand(parent, view, id);
         } else
         if ("logout".equals(comm)) {
+            ChatPanelView view = ((ChatPanelView)Utility.findParent((Component)e.getSource(), ChatPanelView.class));
             parent.setModel(new Model());
-            command = new ShowLoginViewCommand(parent);
+            command = new ShowLoginViewCommand(parent, view);
         } 
         else 
             throw new ParseException("No command", 0);
-    }
-    
-    private static <T extends Container> T findParent(Component comp, Class<T> clazz)  {
-        if (comp == null)
-           return null;
-        if (clazz.isInstance(comp))
-           return (clazz.cast(comp));
-        else
-           return findParent(comp.getParent(), clazz);     
-    }
+    }  
 }
