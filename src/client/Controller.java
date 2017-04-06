@@ -1,6 +1,5 @@
 package client;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -30,17 +29,19 @@ public class Controller implements ActionListener {
         } catch (ParseException e1) {
             return;
         }
-        ((AbstractView)findParent((Component)e.getSource(), AbstractView.class)).clearFields();
-        ((AbstractView)findParent((Component)e.getSource(), AbstractView.class)).setVisible(false);
+        AbstractView view = ((AbstractView)findParent((Component)e.getSource(), AbstractView.class)); 
+        view.clearFields();
+        view.setVisible(false);
         command.execute();
     }
 
     private void doAction(ActionEvent e) throws ParseException {
-        if ("login".equals(e.getActionCommand())){
+        String comm = e.getActionCommand();
+        if ("login".equals(comm)){
             LoginPanelView view = ((LoginPanelView)findParent((Component)e.getSource(), LoginPanelView.class));
             if (! EmailValidator.getInstance().isValid(view.getUserNameField().getText())){
                 view.setVisible(false);
-                view.getMainPanel().add(view.getErrorLable(), BorderLayout.SOUTH);
+                view.getMainPanel().add(view.getErrorLable());
                 view.getErrorLable().setVisible(true);
                 view.setVisible(true);
                 view.repaint();
@@ -50,17 +51,18 @@ public class Controller implements ActionListener {
                 command = new ShowChatViewCommand(parent);
             }
         } else
-        if ("send".equals(e.getActionCommand())) {
+        if ("send".equals(comm)) {
             ChatPanelView view = ((ChatPanelView)findParent((Component)e.getSource(), ChatPanelView.class));
             parent.getModel().setCurrentMessageText(view.getTextMessageField().getText());
             // отправить на сервер
-            parent.getModel().addMessage(new Message(new Long(id.incrementAndGet()), view.getTextMessageField().getText(), parent.getModel().getCurrentUser(), "", Calendar.getInstance()));
+            parent.getModel().addMessage(
+                    new Message(Long.valueOf(id.incrementAndGet()), view.getTextMessageField().getText(), parent.getModel().getCurrentUser(), "", Calendar.getInstance()));
             // сообщение вьюхе об изменении
             view.getMessagesTextPane().setText("<html>" + parent.getModel().getMessages() + "</html>");
             view.getTextMessageField().setText("");
             throw new ParseException("send op", 0);
         } else
-        if ("logout".equals(e.getActionCommand())) {
+        if ("logout".equals(comm)) {
             parent.setModel(new Model());
             command = new ShowLoginViewCommand(parent);
         } 
@@ -68,7 +70,7 @@ public class Controller implements ActionListener {
             throw new ParseException("No command", 0);
     }
     
-    public static <T extends Container> T findParent(Component comp, Class<T> clazz)  {
+    private static <T extends Container> T findParent(Component comp, Class<T> clazz)  {
         if (comp == null)
            return null;
         if (clazz.isInstance(comp))

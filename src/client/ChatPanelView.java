@@ -1,6 +1,8 @@
 package client;
 
 import java.awt.BorderLayout;
+
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,7 +30,7 @@ public class ChatPanelView extends AbstractView {
         initialize();
     }
 
-    private void initialize() {
+    @Override public void initialize() {
         this.setName("chatPanelView");
         this.setLayout(new BorderLayout());
         JPanel header = new JPanel(new BorderLayout());
@@ -53,18 +55,11 @@ public class ChatPanelView extends AbstractView {
     private JPanel getTextMessagePanel() {
         if (textMessagePanel == null) {
             textMessagePanel = new JPanel();
-            textMessagePanel.setLayout(new BorderLayout());
+            textMessagePanel.setLayout(new BoxLayout(textMessagePanel, BoxLayout.X_AXIS));
             addLabeledField(textMessagePanel, "¬ведите сообщение", getTextMessageField());
             textMessagePanel.add(getSendMessageButton(), BorderLayout.EAST);
         }
         return textMessagePanel;
-    }
-
-    private void addLabeledField(JPanel panel, String labelText, JTextField textField) {
-        JLabel label = new JLabel(labelText);
-        label.setLabelFor(textField);
-        panel.add(label, BorderLayout.WEST);
-        panel.add(textField, BorderLayout.CENTER);
     }
 
     JTextField getTextMessageField() {

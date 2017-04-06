@@ -3,6 +3,7 @@ package client;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,11 +21,15 @@ public class LoginPanelView extends AbstractView{
     private JTextField userNameField;
     private JLabel errorLable;
 
-    /**
-     * @return the mainPanel
-     */
-    public JPanel getMainPanel() {
-        return mainPanel;
+    public LoginPanelView(ChatMessangerAppl chatMessageAppl) {
+        this.parent = chatMessageAppl;
+        initialize();        
+    }
+    
+    @Override public void initialize() {
+        this.setName("loginPanelView");
+        this.setLayout(new BorderLayout());
+        this.add(getLoginPanel(), BorderLayout.CENTER);
     }
     
     /**
@@ -34,34 +39,25 @@ public class LoginPanelView extends AbstractView{
         this.mainPanel = mainPanel;
     }
     
-    public LoginPanelView(ChatMessangerAppl chatMessageAppl) {
-        this.parent = chatMessageAppl;
-        initialize();        
-    }
-    
-    private void initialize() {
-        this.setName("loginPanelView");
-        this.setLayout(new BorderLayout());
-        this.add(getLoginPanel(), BorderLayout.CENTER);
-    }
-    
     private JPanel getLoginPanel() {
         if (loginPanel == null) {
             loginPanel = new JPanel();
             loginPanel.setLayout(new BorderLayout());
-            addLabeledField(loginPanel, "Введите имя", getUserNameField()); 
+            loginPanel.add(getMainPanel(), BorderLayout.NORTH);
+            // Добавить поле с меткой. При необходимости можно добавить другие поля,
+            // например, пароль или адрес сервера             
+            addLabeledField(getMainPanel(), "Введите имя (адрес е-почты)", getUserNameField()); 
             loginPanel.add(getLoginButton(), BorderLayout.SOUTH);            
         }
         return loginPanel;
     }
-
-    private void addLabeledField(JPanel panel, String labelText, JTextField textField) {
-        JLabel label = new JLabel(labelText);
-        label.setLabelFor(textField);
-        panel.add(label, BorderLayout.NORTH);
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(textField, BorderLayout.NORTH);
-        panel.add(mainPanel, BorderLayout.CENTER);
+    
+    JPanel getMainPanel() {
+        if (mainPanel == null) {
+            mainPanel = new JPanel();
+            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        }
+        return mainPanel;
     }
 
     private JButton getLoginButton() {

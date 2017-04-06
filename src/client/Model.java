@@ -21,12 +21,12 @@ public class Model {
 
             @Override public String toString()
             {
-                String result = "";
+                StringBuilder result = new StringBuilder();
                 Iterator<Message> i = iterator();
                 while (i.hasNext()) {
-                    result += i.next().toString() + "\n";
+                    result.append(i.next().toString()).append("\n");
                 }
-                return result;
+                return result.toString();
             }
         };
         lastMessageId = 0L;
