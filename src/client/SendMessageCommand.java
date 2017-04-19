@@ -22,7 +22,7 @@ public class SendMessageCommand implements Command {
       parent.getModel().addMessage(
               new Message(Long.valueOf(id.incrementAndGet()), view.getTextMessageField().getText(), parent.getModel().getCurrentUser(), "", Calendar.getInstance()));
       // получить обновления и вызвать нотификацию
-      view.getMessagesTextPane().setText("<html>" + parent.getModel().getMessages() + "</html>");
+      view.getMessagesTextPane().setText(parent.getModel().getMessages());
       view.getTextMessageField().setText("");
     }
 }

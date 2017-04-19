@@ -9,24 +9,22 @@ import logic.Message;
 
 public class Model {
     private String currentUser = "";
-    private String currentMessageText = "";
+    private String lastMessageText = "";
     private Set<Message> messages;
     private Long lastMessageId;
     
     public Model() {
         super();
-        messages = new TreeSet<Message>()
-        {
+        messages = new TreeSet<Message>() {
             private static final long serialVersionUID = 1L;
 
-            @Override public String toString()
-            {
-                StringBuilder result = new StringBuilder();
+            @Override public String toString() {
+                StringBuilder result = new StringBuilder("<html>");
                 Iterator<Message> i = iterator();
                 while (i.hasNext()) {
                     result.append(i.next().toString()).append("\n");
                 }
-                return result.toString();
+                return result.append("</html>").toString();
             }
         };
         lastMessageId = 0L;
@@ -61,15 +59,16 @@ public class Model {
     /**
      * @return the currentMessageText
      */
-    public String getCurrentMessageText() {
-        return currentMessageText;
+    public String getLastMessageText() {
+        return lastMessageText;
     }
     /**
      * @param currentMessageText the currentMessageText to set
      */
-    public void setCurrentMessageText(String currentMessageText) {
-        this.currentMessageText = currentMessageText;
+    public void setLastMessageText(String currentMessageText) {
+        this.lastMessageText = currentMessageText;
     }
+
     /**
      * @return the messages
      */

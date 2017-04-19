@@ -108,7 +108,7 @@ public class ChatPanelView extends AbstractView {
     }
 
     public void initModel() {
-        parent.getModel().setCurrentMessageText("");
+        parent.getModel().setLastMessageText("");
         // Получить сообщение с сервера
         getMessagesTextPane().setText(parent.getModel().getMessages());
     }

@@ -17,8 +17,8 @@ public class ChatMessangerAppl extends JFrame{
     private Model model;
     private Controller controller;
     private JPanel contentPanel;
-    private JPanel loginPanelView;
-    private JPanel chatPanelView;
+    private AbstractView loginPanelView;
+    private AbstractView chatPanelView;
 
     public ChatMessangerAppl() {
         super();

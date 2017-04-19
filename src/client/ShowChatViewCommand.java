@@ -4,7 +4,6 @@ public class ShowChatViewCommand implements Command {
     private ChatMessangerAppl appl;
     private LoginPanelView view;
 
-
     public ShowChatViewCommand(ChatMessangerAppl parent, LoginPanelView panel) {
         appl = parent;
         view = panel;

@@ -42,7 +42,7 @@ public class Controller implements ActionListener {
         } else
         if ("send".equals(comm)) {
             ChatPanelView view = ((ChatPanelView)Utility.findParent((Component)e.getSource(), ChatPanelView.class));
-            parent.getModel().setCurrentMessageText(view.getTextMessageField().getText());
+            parent.getModel().setLastMessageText(view.getTextMessageField().getText());
             command = new SendMessageCommand(parent, view, id);
         } else
         if ("logout".equals(comm)) {

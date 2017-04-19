@@ -182,12 +182,15 @@ public class Message implements Serializable, Comparable<Message> {
      */
     @Override
     public String toString() {
-        return "<b>" + userNameFrom 
-                + ((userNameTo.length() != 0) ? (" -> " + userNameTo) : "")
-                + ":</b><br><message>"
-                + text + "</message><br><div align=right style='font-size:small'>"
-                + (new SimpleDateFormat("HH:mm:ss dd-MMM-yyyy")).format(moment.getTime())
-                + "</div><br>";
+        return new StringBuilder("<b>")
+                .append( userNameFrom) 
+                .append((userNameTo.length() != 0) ? (" -> " + userNameTo) : "")
+                .append(":</b><br><message>")
+                .append(text)
+                .append("</message><br><div align=right style='font-size:small'>")
+                .append((new SimpleDateFormat("HH:mm:ss dd-MMM-yyyy")).format(moment.getTime()))
+                .append("</div><br>")
+                .toString();
     }
 
     @Override
