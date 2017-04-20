@@ -34,7 +34,7 @@ public class Controller implements ActionListener {
         if ("login".equals(comm)){
             LoginPanelView view = ((LoginPanelView)Utility.findParent((Component)e.getSource(), LoginPanelView.class));
             if (! EmailValidator.getInstance().isValid(view.getUserNameField().getText())){
-                command = new LoginErrorCommand(parent, view);
+                command = new LoginErrorCommand(view);
             } else {
                 parent.getModel().setCurrentUser(view.getUserNameField().getText());
                 command = new ShowChatViewCommand(parent, view);

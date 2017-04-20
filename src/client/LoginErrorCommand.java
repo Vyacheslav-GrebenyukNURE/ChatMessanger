@@ -1,11 +1,9 @@
 package client;
 
 public class LoginErrorCommand implements Command {
-    ChatMessangerAppl parent;
-    LoginPanelView view;
+    private LoginPanelView view;
 
-    public LoginErrorCommand(ChatMessangerAppl parent, LoginPanelView view) {
-        this.parent = parent;
+    public LoginErrorCommand(LoginPanelView view) {
         this.view = view;
     }
 

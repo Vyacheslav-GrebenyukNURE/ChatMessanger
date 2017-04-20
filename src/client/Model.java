@@ -76,7 +76,7 @@ public class Model {
         return messages.toString();
     }
     /**
-     * @param messages the messages to set
+     * @param messages the messages to add
      */
     public void addMessages(List<Message> messages) {
         this.messages.addAll(messages);
