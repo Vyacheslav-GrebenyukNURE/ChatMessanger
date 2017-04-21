@@ -13,8 +13,7 @@ public class LoginPanelView extends AbstractView{
     /**
      * 
      */
-    private static final long serialVersionUID = -6308995713965796115L;
-    private ChatMessangerAppl parent;
+    private static final long serialVersionUID = -6308995713965796115L;    
     private JPanel loginPanel;
     private JPanel mainPanel;
     private JButton loginButton;
@@ -22,7 +21,7 @@ public class LoginPanelView extends AbstractView{
     private JLabel errorLable;
 
     public LoginPanelView(ChatMessangerAppl chatMessageAppl) {
-        this.parent = chatMessageAppl;
+        super(chatMessageAppl);
         initialize();        
     }
     
@@ -84,6 +83,11 @@ public class LoginPanelView extends AbstractView{
             errorLable.setForeground(Color.red);
         }
         return errorLable;
+    }
+    
+    @SuppressWarnings("unused")
+    private void setErrorLableText(String text){
+        getErrorLable().setText(text);
     }
 
     public void initModel() {

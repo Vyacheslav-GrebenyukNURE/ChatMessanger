@@ -12,6 +12,7 @@ public class Model {
     private String lastMessageText = "";
     private Set<Message> messages;
     private Long lastMessageId;
+    private String serverIPAddress="127.0.0.1";
     
     public Model() {
         super();
@@ -67,6 +68,14 @@ public class Model {
      */
     public void setLastMessageText(String currentMessageText) {
         this.lastMessageText = currentMessageText;
+    }
+
+    public String getServerIPAddress() {
+        return serverIPAddress;
+    }
+
+    public void setServerIPAddress(String serverIPAddress) {
+        this.serverIPAddress = serverIPAddress;
     }
 
     /**

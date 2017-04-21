@@ -17,7 +17,6 @@ public class ChatPanelView extends AbstractView {
      * 
      */
     private static final long serialVersionUID = 5849245903242954304L;
-    private ChatMessangerAppl parent;
     private JScrollPane messagesListPanel;
     private JTextPane messagesTextPane;
     private JPanel textMessagePanel;
@@ -26,7 +25,7 @@ public class ChatPanelView extends AbstractView {
     private JButton logoutButton;
     
     public ChatPanelView(ChatMessangerAppl chatMessageAppl) {
-        this.parent = chatMessageAppl;
+        super(chatMessageAppl);
         initialize();
     }
 

@@ -22,35 +22,40 @@ public class Controller implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            doAction(e);
+            action(e);
         } catch (ParseException e1) {
             return;
         }
         command.execute();
     }
 
-    private void doAction(ActionEvent e) throws ParseException {
+    private void action(ActionEvent e) throws ParseException {
         String comm = e.getActionCommand();
-        if ("login".equals(comm)){
-            LoginPanelView view = ((LoginPanelView)Utility.findParent((Component)e.getSource(), LoginPanelView.class));
-            if (! EmailValidator.getInstance().isValid(view.getUserNameField().getText())){
+        switch (comm) {
+        case "login": {
+            LoginPanelView view = Utility.findParent((Component) e.getSource(), LoginPanelView.class);
+            if (!EmailValidator.getInstance().isValid(view.getUserNameField().getText())) {
                 command = new LoginErrorCommand(view);
             } else {
                 parent.getModel().setCurrentUser(view.getUserNameField().getText());
                 command = new ShowChatViewCommand(parent, view);
             }
-        } else
-        if ("send".equals(comm)) {
-            ChatPanelView view = ((ChatPanelView)Utility.findParent((Component)e.getSource(), ChatPanelView.class));
+        }
+            break;
+        case "send": {
+            ChatPanelView view = Utility.findParent((Component) e.getSource(), ChatPanelView.class);
             parent.getModel().setLastMessageText(view.getTextMessageField().getText());
             command = new SendMessageCommand(parent, view, id);
-        } else
-        if ("logout".equals(comm)) {
-            ChatPanelView view = ((ChatPanelView)Utility.findParent((Component)e.getSource(), ChatPanelView.class));
+        }
+            break;
+        case "logout": {
+            ChatPanelView view = Utility.findParent((Component) e.getSource(), ChatPanelView.class);
             parent.setModel(new Model());
             command = new ShowLoginViewCommand(parent, view);
-        } 
-        else 
+        }
+            break;
+        default:
             throw new ParseException("No command", 0);
-    }  
+        }
+    }
 }
