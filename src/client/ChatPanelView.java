@@ -24,7 +24,7 @@ public class ChatPanelView extends AbstractView {
     private JTextField textMessageField;
     private JButton logoutButton;
     
-    public ChatPanelView(ChatMessangerAppl chatMessageAppl) {
+    public ChatPanelView(ChatMessengerAppl chatMessageAppl) {
         super(chatMessageAppl);
         initialize();
     }

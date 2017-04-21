@@ -20,7 +20,7 @@ public class LoginPanelView extends AbstractView{
     private JTextField userNameField;
     private JLabel errorLable;
 
-    public LoginPanelView(ChatMessangerAppl chatMessageAppl) {
+    public LoginPanelView(ChatMessengerAppl chatMessageAppl) {
         super(chatMessageAppl);
         initialize();        
     }

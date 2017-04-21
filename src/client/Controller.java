@@ -9,12 +9,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class Controller implements ActionListener {
-    private ChatMessangerAppl parent;
+    private ChatMessengerAppl parent;
     private Command command;
     // Необходимо для демонстрации работы без сервера
     private AtomicInteger id;
 
-    public Controller(ChatMessangerAppl chatMessangerAppl) {
+    public Controller(ChatMessengerAppl chatMessangerAppl) {
         parent = chatMessangerAppl;
         id = new AtomicInteger(0);
     }

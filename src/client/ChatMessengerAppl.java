@@ -6,7 +6,7 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class ChatMessangerAppl extends JFrame{
+public class ChatMessengerAppl extends JFrame{
     /**
      * 
      */
@@ -20,13 +20,13 @@ public class ChatMessangerAppl extends JFrame{
     private AbstractView loginPanelView;
     private AbstractView chatPanelView;
 
-    public ChatMessangerAppl() {
+    public ChatMessengerAppl() {
         super();
         initialize();
     }
     
     public static void main(String[] args) {
-        JFrame frame = new ChatMessangerAppl();
+        JFrame frame = new ChatMessengerAppl();
         frame.setVisible(true);
         frame.repaint();
     }

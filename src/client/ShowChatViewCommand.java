@@ -1,10 +1,10 @@
 package client;
 
 public class ShowChatViewCommand implements Command {
-    private ChatMessangerAppl appl;
+    private ChatMessengerAppl appl;
     private AbstractView view;
 
-    public ShowChatViewCommand(ChatMessangerAppl parent, LoginPanelView panel) {
+    public ShowChatViewCommand(ChatMessengerAppl parent, LoginPanelView panel) {
         appl = parent;
         view = panel;
     }
