@@ -4,10 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 public class LoginPanelView extends AbstractView{
     /**
@@ -29,6 +31,11 @@ public class LoginPanelView extends AbstractView{
         this.setName("loginPanelView");
         this.setLayout(new BorderLayout());
         this.add(getLoginPanel(), BorderLayout.CENTER);
+        InputMap im = loginButton.getInputMap();
+        im.put(KeyStroke.getKeyStroke("ENTER"), "pressed");
+        im.put(KeyStroke.getKeyStroke("released ENTER"), "released");
+        getUserNameField().requestFocus();
+        parent.getRootPane().setDefaultButton(loginButton);
     }
     
     /**

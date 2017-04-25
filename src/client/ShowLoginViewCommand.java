@@ -11,8 +11,10 @@ public class ShowLoginViewCommand implements Command {
 
     @Override
     public void execute() {
+        
         view.clearFields();
         view.setVisible(false);
+        appl.getTimer().cancel();
         appl.showLoginPanelView();
     }
 }

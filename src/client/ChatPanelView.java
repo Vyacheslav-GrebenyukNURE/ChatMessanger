@@ -3,12 +3,14 @@ package client;
 import java.awt.BorderLayout;
 
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.text.DefaultCaret;
 
@@ -38,6 +40,11 @@ public class ChatPanelView extends AbstractView {
         this.add(header, BorderLayout.NORTH);
         this.add(getMessagesListPanel(), BorderLayout.CENTER);
         this.add(getTextMessagePanel(), BorderLayout.SOUTH);
+        InputMap im = sendMessageButton.getInputMap();
+        im.put(KeyStroke.getKeyStroke("ENTER"), "pressed");
+        im.put(KeyStroke.getKeyStroke("released ENTER"), "released");
+        getTextMessageField().requestFocus();
+        parent.getRootPane().setDefaultButton(sendMessageButton);
     }
 
     private JButton getLogoutButton() {
@@ -74,7 +81,7 @@ public class ChatPanelView extends AbstractView {
             sendMessageButton = new JButton();
             sendMessageButton.setText("Отправить");
             sendMessageButton.setName("sendMessageButton");
-            sendMessageButton.setActionCommand("send");
+            sendMessageButton.setActionCommand("send");            
             sendMessageButton.addActionListener(parent.getController());
         }
         return sendMessageButton;
@@ -109,11 +116,15 @@ public class ChatPanelView extends AbstractView {
     public void initModel() {
         parent.getModel().setLastMessageText("");
         // Получить сообщение с сервера
-        getMessagesTextPane().setText(parent.getModel().getMessages());
+        getMessagesTextPane().setText(parent.getModel().messagesToString());
     }
 
     public void clearFields() {
         getMessagesTextPane().setText("");
         getTextMessageField().setText("");
+    }
+
+    public void modelChangedNotification() {
+        getMessagesTextPane().setText(parent.getModel().messagesToString());                
     }
 }

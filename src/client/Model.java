@@ -16,7 +16,7 @@ public class Model {
     
     public Model() {
         super();
-        messages = new TreeSet<Message>() {
+        setMessages(new TreeSet<Message>() {
             private static final long serialVersionUID = 1L;
 
             @Override public String toString() {
@@ -27,7 +27,7 @@ public class Model {
                 }
                 return result.append("</html>").toString();
             }
-        };
+        });
         lastMessageId = 0L;
     }
     
@@ -79,20 +79,27 @@ public class Model {
     }
 
     /**
-     * @return the messages
+     * @return the messages in String
      */
-    public String getMessages() {
-        return messages.toString();
+    public String messagesToString() {
+        return getMessages().toString();
     }
     /**
      * @param messages the messages to add
      */
     public void addMessages(List<Message> messages) {
-        this.messages.addAll(messages);
+        this.getMessages().addAll(messages);
     }
 
     public void addMessage(Message message) {
-        this.messages.add(message);        
-    }   
-    
+        this.getMessages().add(message);        
+    }
+
+    public Set<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Set<Message> messages) {
+        this.messages = messages;
+    }       
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<messages>
+	<message id="1" moment="18:42:15 22-апр-2017" sender="vyacheslav.grebenyuk@nure.ua"
+		receiver="viktor.kauk@nure.ua">
+		Привет
+	</message>
+	<message id="2" moment="18:43:44 22-апр-2017" sender="viktor.kauk@nure.ua"
+		receiver="vyacheslav.grebenyuk@nure.ua">
+		Здравствуй!
+	</message>
+</messages>

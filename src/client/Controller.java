@@ -17,6 +17,10 @@ public class Controller implements ActionListener {
     public Controller(ChatMessengerAppl chatMessangerAppl) {
         parent = chatMessangerAppl;
         id = new AtomicInteger(0);
+        initialize();
+    }
+
+    private void initialize() {
     }
 
     @Override

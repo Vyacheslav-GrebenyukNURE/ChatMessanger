@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.util.Timer;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,12 +14,14 @@ public class ChatMessengerAppl extends JFrame{
     private static final long serialVersionUID = 6486409443796464545L;
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 400;
+    static final int PORT = 7070;
 
     private Model model;
     private Controller controller;
     private JPanel contentPanel;
     private AbstractView loginPanelView;
     private AbstractView chatPanelView;
+    private Timer timer; 
 
     public ChatMessengerAppl() {
         super();
@@ -34,6 +37,7 @@ public class ChatMessengerAppl extends JFrame{
     private void initialize() {
         model = new Model();
         controller = new Controller(this);
+        timer = new Timer("Server request for update messages");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         this.setLocationRelativeTo(null);
@@ -86,7 +90,7 @@ public class ChatMessengerAppl extends JFrame{
         return loginPanelView;
     }
     
-    private JPanel getChatPanelView() {
+    JPanel getChatPanelView() {
         if (chatPanelView == null) {
             chatPanelView = new ChatPanelView(this);
         }
@@ -94,6 +98,14 @@ public class ChatMessengerAppl extends JFrame{
         return chatPanelView;
     }
     
+    public Timer getTimer() {
+        return timer;
+    }
+    
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }    
+
     private void showPanel(JPanel panel) {
         getContentPane().add(panel, BorderLayout.CENTER);
         panel.setVisible(true);
@@ -105,5 +117,5 @@ public class ChatMessengerAppl extends JFrame{
     }
     public void showLoginPanelView() {
         showPanel(getLoginPanelView());        
-    }    
+    }
  }
