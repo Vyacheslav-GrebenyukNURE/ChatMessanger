@@ -11,7 +11,6 @@ public class UpdateMessageTask extends TimerTask {
 
     @Override
     public void run() {
-        Utility.messagesUpdate(appl);
-        ((ChatPanelView) appl.getChatPanelView()).modelChangedNotification();
+        Utility.messagesUpdate(appl);        
     }
 }

@@ -20,12 +20,12 @@ public class Model {
             private static final long serialVersionUID = 1L;
 
             @Override public String toString() {
-                StringBuilder result = new StringBuilder("<html>");
+                StringBuilder result = new StringBuilder("<html><body id='body'>");
                 Iterator<Message> i = iterator();
                 while (i.hasNext()) {
                     result.append(i.next().toString()).append("\n");
                 }
-                return result.append("</html>").toString();
+                return result.append("</body></html>").toString();
             }
         });
         lastMessageId = 0L;

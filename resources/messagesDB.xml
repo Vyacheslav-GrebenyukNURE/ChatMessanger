@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <messages>
-	<message id="1" moment="18:42:15 22-апр-2017" sender="vyacheslav.grebenyuk@nure.ua"
-		receiver="viktor.kauk@nure.ua">
-		Привет
-	</message>
-	<message id="2" moment="18:43:44 22-апр-2017" sender="viktor.kauk@nure.ua"
-		receiver="vyacheslav.grebenyuk@nure.ua">
-		Здравствуй!
-	</message>
+    <message id="1" moment="17:01:15 26-04-2017"
+        receiver="viktor.kauk@nure.ua" sender="vyacheslav.grebenyuk@nure.ua">Привет!</message>
+    <message id="2" moment="17:02:35 26-04-2017"
+        receiver="vyacheslav.grebenyuk@nure.ua" sender="viktor.kauk@nure.ua">Здравствуй!</message>
+    <message id="3" moment="17:12:27 26-04-2017" receiver="" sender="vyacheslav.grebenyuk@nure.ua">Тестируем запись</message>
 </messages>
+

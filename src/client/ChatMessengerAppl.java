@@ -90,11 +90,11 @@ public class ChatMessengerAppl extends JFrame{
         return loginPanelView;
     }
     
-    JPanel getChatPanelView() {
+    JPanel getChatPanelView(boolean getMessages) {
         if (chatPanelView == null) {
             chatPanelView = new ChatPanelView(this);
         }
-        ((ChatPanelView) chatPanelView).initModel();
+        ((ChatPanelView) chatPanelView).initModel(getMessages);
         return chatPanelView;
     }
     
@@ -113,7 +113,7 @@ public class ChatMessengerAppl extends JFrame{
     }
 
     public void showChatPanelView() {
-        showPanel(getChatPanelView());        
+        showPanel(getChatPanelView(true));        
     }
     public void showLoginPanelView() {
         showPanel(getLoginPanelView());        

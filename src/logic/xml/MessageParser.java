@@ -7,7 +7,7 @@ import logic.Message;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,9 +19,9 @@ public class MessageParser extends DefaultHandler {
     private String thisElement = "";
     private Message message = new Message();
     private AtomicInteger id;
-    private Map<Long, Message> messageDB;
+    private List<Message> messageDB;
 
-    public MessageParser(AtomicInteger id, Map<Long, Message> messagesDB) {
+    public MessageParser(AtomicInteger id, List<Message> messagesDB) {
         this.id = id;
         this.messageDB = messagesDB;
     }
@@ -54,7 +54,7 @@ public class MessageParser extends DefaultHandler {
                     break;
                 case "moment":
                     Calendar cal = Calendar.getInstance();
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss dd-MMM-yyyy");
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
                     try {
                         cal.setTime(sdf.parse(value));
                     } catch (ParseException e) {
@@ -78,7 +78,7 @@ public class MessageParser extends DefaultHandler {
                 id.set(newId.intValue());
             }
             logger.debug("id = " + newId);
-            messageDB.put(newId, message);
+            messageDB.add(message);
         }
         thisElement = "";
         logger.debug("endElement");

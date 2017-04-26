@@ -31,11 +31,9 @@ public class LoginPanelView extends AbstractView{
         this.setName("loginPanelView");
         this.setLayout(new BorderLayout());
         this.add(getLoginPanel(), BorderLayout.CENTER);
-        InputMap im = loginButton.getInputMap();
+        InputMap im = getLoginButton().getInputMap();
         im.put(KeyStroke.getKeyStroke("ENTER"), "pressed");
         im.put(KeyStroke.getKeyStroke("released ENTER"), "released");
-        getUserNameField().requestFocus();
-        parent.getRootPane().setDefaultButton(loginButton);
     }
     
     /**
@@ -99,6 +97,8 @@ public class LoginPanelView extends AbstractView{
 
     public void initModel() {
         parent.getModel().setCurrentUser("");
+        getUserNameField().requestFocusInWindow();
+        parent.getRootPane().setDefaultButton(getLoginButton());
     }
     
     public void clearFields() {

@@ -10,6 +10,15 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+
+import logic.Message;
+import logic.xml.MessageBuilder;
+
 public class SendMessageCommand implements Command {
     private ChatMessengerAppl parent;
     private ChatPanelView view;
@@ -40,22 +49,24 @@ public class SendMessageCommand implements Command {
             String result;
             do{
                 out.println("PUT");
-                StringBuilder buf = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
-                buf.append("<messages>\n")
-                .append("<message sender=\"")
-                .append(parent.getModel().getCurrentUser())
-                .append("\" receiver=\"")
-                .append("") // User to
-                .append("\">\n")
-                .append(view.getTextMessageField().getText())
-                .append("\n</message>")
-                .append("\n</messages>");
-                out.println(buf);
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder.newDocument();
+                
+                String xmlContent = MessageBuilder.buildDocument(document,
+                        new Message[]
+                                {new Message(view.getTextMessageField().getText(),
+                                        parent.getModel().getCurrentUser(),
+                                        "")});
+                out.println(xmlContent);
                 out.println("END");
                 // Получить ОК
                 result = in.readLine();
             } while (! "OK".equals(result));            
         } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {

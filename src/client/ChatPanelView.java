@@ -1,6 +1,7 @@
 package client;
 
 import java.awt.BorderLayout;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.InputMap;
@@ -12,7 +13,11 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.Element;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLDocument;
 
 public class ChatPanelView extends AbstractView {
     /**
@@ -40,11 +45,9 @@ public class ChatPanelView extends AbstractView {
         this.add(header, BorderLayout.NORTH);
         this.add(getMessagesListPanel(), BorderLayout.CENTER);
         this.add(getTextMessagePanel(), BorderLayout.SOUTH);
-        InputMap im = sendMessageButton.getInputMap();
+        InputMap im = getSendMessageButton().getInputMap();
         im.put(KeyStroke.getKeyStroke("ENTER"), "pressed");
         im.put(KeyStroke.getKeyStroke("released ENTER"), "released");
-        getTextMessageField().requestFocus();
-        parent.getRootPane().setDefaultButton(sendMessageButton);
     }
 
     private JButton getLogoutButton() {
@@ -105,18 +108,21 @@ public class ChatPanelView extends AbstractView {
     protected JTextPane getMessagesTextPane() {
         if (messagesTextPane == null) {
             messagesTextPane = new JTextPane();
-            messagesTextPane.setEditable(false);
             messagesTextPane.setContentType("text/html");
+            messagesTextPane.setEditable(false);
             messagesTextPane.setName("messageTextArea");
             ((DefaultCaret) messagesTextPane.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         }
         return messagesTextPane;
     }
 
-    public void initModel() {
+    public void initModel(boolean getMessages) {
         parent.getModel().setLastMessageText("");
-        // Получить сообщение с сервера
-        getMessagesTextPane().setText(parent.getModel().messagesToString());
+        if (getMessages){
+            getMessagesTextPane().setText(parent.getModel().messagesToString());
+        }
+        getTextMessageField().requestFocusInWindow();
+        parent.getRootPane().setDefaultButton(getSendMessageButton());
     }
 
     public void clearFields() {
@@ -124,7 +130,15 @@ public class ChatPanelView extends AbstractView {
         getTextMessageField().setText("");
     }
 
-    public void modelChangedNotification() {
-        getMessagesTextPane().setText(parent.getModel().messagesToString());                
+    public void modelChangedNotification(String newMessages) {
+        if (newMessages.length() != 0){
+            HTMLDocument doc = (HTMLDocument)getMessagesTextPane().getStyledDocument();
+            try {                            
+                Element elem = doc.getElement(doc.getRootElements()[0], HTML.Attribute.ID, "body");
+                doc.insertBeforeEnd(elem, "<html><body>" + newMessages + "</body></html>");
+            } catch (BadLocationException | IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
