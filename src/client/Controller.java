@@ -4,19 +4,15 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class Controller implements ActionListener {
     private ChatMessengerAppl parent;
     private Command command;
-    // Необходимо для демонстрации работы без сервера
-    private AtomicInteger id;
 
     public Controller(ChatMessengerAppl chatMessangerAppl) {
         parent = chatMessangerAppl;
-        id = new AtomicInteger(0);
         initialize();
     }
 
@@ -49,7 +45,7 @@ public class Controller implements ActionListener {
         case "send": {
             ChatPanelView view = Utility.findParent((Component) e.getSource(), ChatPanelView.class);
             parent.getModel().setLastMessageText(view.getTextMessageField().getText());
-            command = new SendMessageCommand(parent, view, id);
+            command = new SendMessageCommand(parent, view);
         }
             break;
         case "logout": {

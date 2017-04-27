@@ -8,7 +8,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,7 +23,7 @@ public class SendMessageCommand implements Command {
     private ChatPanelView view;
     
 
-    public SendMessageCommand(ChatMessengerAppl parent, ChatPanelView view, AtomicInteger id) {
+    public SendMessageCommand(ChatMessengerAppl parent, ChatPanelView view) {
         this.parent = parent;
         this.view = view;
     }
