@@ -29,13 +29,13 @@ public class MessageBuilder {
             messageElement.setAttribute("sender", message.getUserNameFrom());
             messageElement.setAttribute("receiver", message.getUserNameTo());
             messageElement.setAttribute("moment", (new SimpleDateFormat("HH:mm:ss dd-MM-yyyy")).format(message.getMoment().getTime()));
-            messageElement.appendChild(
-                    document.createTextNode(message.getText()));
+            messageElement.appendChild(document.createTextNode(message.getText()));
         }
 
         // Форматирование строки xml документа и установка кодировки
         DOMImplementation impl = document.getImplementation();
         DOMImplementationLS implLS = (DOMImplementationLS) impl.getFeature("LS", "3.0");
+
         LSSerializer ser = implLS.createLSSerializer();
         ser.getDomConfig().setParameter("format-pretty-print", true);
         

@@ -19,11 +19,11 @@ public class MessageParser extends DefaultHandler {
     private String thisElement = "";
     private Message message = new Message();
     private AtomicInteger id;
-    private List<Message> messageDB;
+    private List<Message> messages;
 
-    public MessageParser(AtomicInteger id, List<Message> messagesDB) {
+    public MessageParser(AtomicInteger id, List<Message> messages) {
         this.id = id;
-        this.messageDB = messagesDB;
+        this.messages = messages;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class MessageParser extends DefaultHandler {
                 id.set(newId.intValue());
             }
             logger.debug("id = " + newId);
-            messageDB.add(message);
+            messages.add(message);
         }
         thisElement = "";
         logger.debug("endElement");

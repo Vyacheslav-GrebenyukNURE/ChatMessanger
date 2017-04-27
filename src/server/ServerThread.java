@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -57,29 +58,32 @@ class ServerThread extends Thread {
                 LOGGER.debug("get");
                 Long lastId = Long.valueOf(in.readLine());
                 LOGGER.debug(lastId);
-                // Отфильтровать Java 8 Обработка коллекций лямбда-выражениями 
-                Message[] newMessages = messagesDB.entrySet().stream()
-                        .filter(map -> map.getKey().compareTo(lastId) > 0)
-                        .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()))
-                        .values().stream().collect(Collectors.toList())
+                // Отфильтровать Java 8 Обработка коллекций лямбда-выражениями
+                Message[] newMessages = messagesDB.values().stream()
+                        .filter(message -> message.getId().compareTo(lastId) > 0)
+                        .collect(Collectors.toList())
                         .toArray(new Message[0]);
-                LOGGER.debug(newMessages);
+                LOGGER.debug(Arrays.asList(newMessages));
                 // Сформировать и отправить в out xml с сообщениями
                 DocumentBuilderFactory docBuildFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = docBuildFactory.newDocumentBuilder();
                 Document document = builder.newDocument();        
                 String xmlContent = MessageBuilder.buildDocument(document, newMessages);
+                LOGGER.trace("Echoing: " + xmlContent);
                 out.println(xmlContent);
                 out.println("END");
                 out.flush();               
                 break;
             case "PUT":
+                LOGGER.debug("put");
                 requestLine = in.readLine();
                 StringBuilder mesStr = new StringBuilder();
                 while (! "END".equals(requestLine)) {
                     mesStr.append(requestLine);
                     requestLine = in.readLine();
                 }                   
+                LOGGER.debug(mesStr);
+                // Распарсить xml документ с сообщениями и добавить в карту БД
                 SAXParserFactory parserFactory = SAXParserFactory.newInstance();
                 SAXParser parser = parserFactory.newSAXParser();
                 List<Message> messages = new ArrayList<>();
@@ -89,7 +93,7 @@ class ServerThread extends Thread {
                 for (Message message : messages) {
                     messagesDB.put(message.getId(), message);
                 }
-                LOGGER.debug("Echoing: " + mesStr.toString());
+                LOGGER.trace("Echoing: " + messages);
                 out.println("OK");
                 out.flush();
                 out.close();
