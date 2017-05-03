@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.xml.sax.*;
 
 public class MessageParser extends DefaultHandler {
-    final static Logger logger = LogManager.getLogger(MessageParser.class);
+    final static Logger LOGGER = LogManager.getLogger(MessageParser.class);
     private String thisElement = "";
     private Message message = new Message();
     private AtomicInteger id;
@@ -28,20 +28,20 @@ public class MessageParser extends DefaultHandler {
 
     @Override
     public void startDocument() throws SAXException {
-        logger.debug("startDocument");
+        LOGGER.debug("startDocument");
     }
 
     @Override
     public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
         thisElement = qName;
-        logger.debug("startElement");
-        logger.trace("<" + qName);
+        LOGGER.debug("startElement");
+        LOGGER.trace("<" + qName);
         if ("message".equals(qName)){
             message = new Message();
             for (int i = 0; i < atts.getLength(); i++) {
                 String attrName = atts.getLocalName(i);
                 String value = atts.getValue(i);
-                logger.trace(attrName + "=" + value);
+                LOGGER.trace(attrName + "=" + value);
                 switch (attrName) {
                 case "sender":
                     message.setUserNameFrom(value);
@@ -64,7 +64,7 @@ public class MessageParser extends DefaultHandler {
                 }            
             }
         }
-        logger.trace(">");
+        LOGGER.trace(">");
     }
 
     @Override
@@ -77,25 +77,25 @@ public class MessageParser extends DefaultHandler {
                 newId = message.getId();
                 id.set(newId.intValue());
             }
-            logger.debug("id = " + newId);
+            LOGGER.debug("id = " + newId);
             messages.add(message);
         }
         thisElement = "";
-        logger.debug("endElement");
-        logger.trace("</" + qName + ">");
+        LOGGER.debug("endElement");
+        LOGGER.trace("</" + qName + ">");
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         if ("message".equals(thisElement)){
             String messBody = new String(ch, start, length).trim();
-            logger.trace(messBody);
+            LOGGER.trace(messBody);
             message.setText(messBody);
         }
     }
 
     @Override
     public void endDocument() {
-        logger.debug("endDocument");
+        LOGGER.debug("endDocument");
     }
 }

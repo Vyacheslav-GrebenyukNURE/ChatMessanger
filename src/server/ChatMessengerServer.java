@@ -28,7 +28,7 @@ import logic.xml.MessageBuilder;
 import logic.xml.MessageParser;
 
 public class ChatMessengerServer {
-    final static Logger logger = LogManager.getLogger(ChatMessengerServer.class);
+    final static Logger LOGGER = LogManager.getLogger(ChatMessengerServer.class);
     private static final int SERVER_TIMOUT = 500;
     private static final int PORT = 7070;
     private static final String DB_FILE_NAME = "resources/messagesDB.xml";
@@ -44,20 +44,20 @@ public class ChatMessengerServer {
         quitCommandThread();
 
         // Создаем новый серверный сокет
-        ServerSocket s = new ServerSocket(PORT);
-        logger.info("Server started...");
+        ServerSocket serverSocket = new ServerSocket(PORT);
+        LOGGER.info("Server started...");
         
         // Слушаем запросы с тайм-аутом 500мс (для обработки выхода)
         // и создаем новую нить для обработки запроса
         while (!stop) {
-            s.setSoTimeout(SERVER_TIMOUT);
+            serverSocket.setSoTimeout(SERVER_TIMOUT);
             Socket socket;
             try {
-                socket = s.accept();
+                socket = serverSocket.accept();
                 try {
                     new ServerThread(socket, id, messagesDB);
                 } catch (IOException e) {
-                    logger.error("IO error");
+                    LOGGER.error("IO error");
                     socket.close();
                 }
             } catch (SocketTimeoutException e) {                
@@ -66,8 +66,8 @@ public class ChatMessengerServer {
         // Запись бд в файл
         saveMessageDBFile();
         
-        logger.info("Server stoped.");
-        s.close();               
+        LOGGER.info("Server stoped.");
+        serverSocket.close();               
     }
 
     private static void quitCommandThread() {
