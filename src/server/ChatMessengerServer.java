@@ -82,7 +82,7 @@ public class ChatMessengerServer {
                             stop = true;
                             break;
                         } else {
-                            System.out.println("Неберите 'quit' для завершения работы сервера.");
+                            LOGGER.warn("Неберите 'quit' для завершения работы сервера.");
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -110,7 +110,7 @@ public class ChatMessengerServer {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.newDocument();        
-        String xmlContent = MessageBuilder.buildDocument(document, messagesDB.values().toArray(new Message[0]));
+        String xmlContent = MessageBuilder.buildDocument(document, messagesDB.values());
 
         OutputStream stream = new FileOutputStream(new File(DB_FILE_NAME));
         OutputStreamWriter out = new OutputStreamWriter(stream, StandardCharsets.UTF_8);

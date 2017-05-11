@@ -59,10 +59,9 @@ class ServerThread extends Thread {
                 Long lastId = Long.valueOf(in.readLine());
                 LOGGER.debug(lastId);
                 // Отфильтровать Java 8 Обработка коллекций лямбда-выражениями
-                Message[] newMessages = messagesDB.values().stream()
+                List<Message> newMessages = messagesDB.values().stream()
                         .filter(message -> message.getId().compareTo(lastId) > 0)
-                        .collect(Collectors.toList())
-                        .toArray(new Message[0]);
+                        .collect(Collectors.toList());
                 LOGGER.debug(Arrays.asList(newMessages));
                 // Сформировать и отправить в out xml с сообщениями
                 DocumentBuilderFactory docBuildFactory = DocumentBuilderFactory.newInstance();

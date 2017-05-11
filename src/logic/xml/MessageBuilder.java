@@ -3,6 +3,7 @@ package logic.xml;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
@@ -16,7 +17,7 @@ import org.w3c.dom.ls.LSSerializer;
 import logic.Message;
 
 public class MessageBuilder {
-    public static String buildDocument(Document document, Message[] messagesList) throws DOMException, LSException {
+    public static String buildDocument(Document document, Collection<Message> messagesList) throws DOMException, LSException {
         Element rootElement = document.createElement("messages");
         document.appendChild(rootElement);
         

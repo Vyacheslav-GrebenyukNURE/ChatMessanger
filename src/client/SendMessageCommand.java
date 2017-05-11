@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -51,12 +53,12 @@ public class SendMessageCommand implements Command {
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 Document document = builder.newDocument();
+                List<Message> messages = new ArrayList<Message>();
+                messages.add(
+                        new Message(view.getTextMessageField().getText(),
+                                parent.getModel().getCurrentUser(), ""));
                 
-                String xmlContent = MessageBuilder.buildDocument(document,
-                        new Message[]
-                                {new Message(view.getTextMessageField().getText(),
-                                        parent.getModel().getCurrentUser(),
-                                        "")});
+                String xmlContent = MessageBuilder.buildDocument(document, messages);
                 out.println(xmlContent);
                 out.println("END");
                 // Получить ОК
