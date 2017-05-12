@@ -182,14 +182,14 @@ public class Message implements Serializable, Comparable<Message> {
      */
     @Override
     public String toString() {
-        return new StringBuilder("<b>")
+        return new StringBuilder("<p><b>")
                 .append( userNameFrom) 
                 .append((userNameTo.length() != 0) ? (" -> " + userNameTo) : "")
                 .append(":</b><br><message>")
                 .append(text)
                 .append("</message><br><div align=right style='font-size:small'>")
                 .append((new SimpleDateFormat("HH:mm:ss dd-MMM-yyyy")).format(moment.getTime()))
-                .append("</div><br>")
+                .append("</div><br></p>")
                 .toString();
     }
 
