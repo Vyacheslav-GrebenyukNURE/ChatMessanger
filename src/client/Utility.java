@@ -80,7 +80,7 @@ public class Utility {
             if (messages.size() > 0){                
                 model.addMessages(messages);
                 model.setLastMessageId(id.longValue());
-                LOGGER.info("List: " + messages.toString());                
+                LOGGER.trace("List: " + messages.toString());                
                 ((ChatPanelView) appl.getChatPanelView(false)).modelChangedNotification(messages.toString());
             }
             in.close();

@@ -19,10 +19,12 @@ import javax.swing.text.Element;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ChatPanelView extends AbstractView {
-    /**
-     * 
-     */
+    final static Logger LOGGER = LogManager.getLogger(ChatPanelView.class);
+    
     private static final long serialVersionUID = 5849245903242954304L;
     private JScrollPane messagesListPanel;
     private JTextPane messagesTextPane;
@@ -95,12 +97,6 @@ public class ChatPanelView extends AbstractView {
             messagesListPanel = new JScrollPane(getMessagesTextPane());
             messagesListPanel.setSize(getMaximumSize());
             messagesListPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-            // messagesListPanel.getVerticalScrollBar().addAdjustmentListener(new
-            // AdjustmentListener() {
-            // public void adjustmentValueChanged(AdjustmentEvent e) {
-            // e.getAdjustable().setValue(e.getAdjustable().getMaximum());
-            // }
-            // });
         }
         return messagesListPanel;
     }
@@ -132,13 +128,15 @@ public class ChatPanelView extends AbstractView {
 
     public void modelChangedNotification(String newMessages) {
         if (newMessages.length() != 0){
+            LOGGER.trace("New messages: " + newMessages);
             HTMLDocument doc = (HTMLDocument)getMessagesTextPane().getStyledDocument();
             try {                            
                 Element elem = doc.getElement(doc.getRootElements()[0], HTML.Attribute.ID, "body");
                 doc.insertBeforeEnd(elem, newMessages);
                 getMessagesTextPane().setCaretPosition(doc.getLength());
+                LOGGER.trace("Text updated");
             } catch (BadLocationException | IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Bad location error: ", e.getMessage());
             }
         }
     }

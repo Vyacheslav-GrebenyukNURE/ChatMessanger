@@ -22,7 +22,7 @@ public class Model {
             private static final long serialVersionUID = 1L;
 
             @Override public String toString() {
-                StringBuilder result = new StringBuilder("<html><body>");
+                StringBuilder result = new StringBuilder("<html><body id='body'>");
                 Iterator<Message> i = iterator();
                 while (i.hasNext()) {
                     result.append(i.next().toString()).append("\n");
