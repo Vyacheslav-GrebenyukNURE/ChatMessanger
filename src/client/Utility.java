@@ -13,7 +13,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -66,22 +65,22 @@ public class Utility {
             }                   
             SAXParserFactory parserFactory = SAXParserFactory.newInstance();
             SAXParser parser = parserFactory.newSAXParser();
-            List<Message> messages = new ArrayList<>();
-            MessageParser saxp = new MessageParser(new AtomicInteger(), messages);            
+            List<Message> messages = new ArrayList<Message>(){
+                private static final long serialVersionUID = 1L;
+                @Override public String toString() {
+                    return this.stream().map(Message::toString).collect(Collectors.joining("\n"));
+                }
+            };
+            AtomicInteger id  = new AtomicInteger(0);
+            MessageParser saxp = new MessageParser(id, messages);            
             parser.parse(new ByteArrayInputStream(mesStr.toString().getBytes()), saxp);
-            model.addMessages(messages);
-            model.setLastMessageId(((TreeSet<Message>) (model.getMessages())).last().getId());
-            in.close();
-            if (messages.size() > 0){
-                List<Message> addMessages = new ArrayList<Message>(messages){
-                    private static final long serialVersionUID = 1L;
-                    @Override public String toString() {
-                        return this.stream().map(Message::toString).collect(Collectors.joining("\n"));
-                    }
-                };
-                System.out.println("List:" + addMessages.toString());                
-                ((ChatPanelView) appl.getChatPanelView(false)).modelChangedNotification(addMessages.toString());
+            if (messages.size() > 0){                
+                model.addMessages(messages);
+                model.setLastMessageId(id.longValue());
+                System.out.println("List:" + messages.toString());                
+                ((ChatPanelView) appl.getChatPanelView(false)).modelChangedNotification(messages.toString());
             }
+            in.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

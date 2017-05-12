@@ -10,7 +10,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -62,7 +61,7 @@ class ServerThread extends Thread {
                 List<Message> newMessages = messagesDB.values().stream()
                         .filter(message -> message.getId().compareTo(lastId) > 0)
                         .collect(Collectors.toList());
-                LOGGER.debug(Arrays.asList(newMessages));
+                LOGGER.debug(newMessages);
                 // Сформировать и отправить в out xml с сообщениями
                 DocumentBuilderFactory docBuildFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = docBuildFactory.newDocumentBuilder();
