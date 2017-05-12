@@ -12,7 +12,9 @@ public class Model {
     private String lastMessageText = "";
     private Set<Message> messages;
     private Long lastMessageId;
+//    Замените адрес для тестов в аудитории во время занятий
     private String serverIPAddress="127.0.0.1";
+//    private String serverIPAddress="10.13.30.1";
     
     public Model() {
         super();
@@ -20,7 +22,7 @@ public class Model {
             private static final long serialVersionUID = 1L;
 
             @Override public String toString() {
-                StringBuilder result = new StringBuilder("<html><body id='body'>");
+                StringBuilder result = new StringBuilder("<html><body>");
                 Iterator<Message> i = iterator();
                 while (i.hasNext()) {
                     result.append(i.next().toString()).append("\n");

@@ -135,7 +135,6 @@ public class ChatPanelView extends AbstractView {
             HTMLDocument doc = (HTMLDocument)getMessagesTextPane().getStyledDocument();
             try {                            
                 Element elem = doc.getElement(doc.getRootElements()[0], HTML.Attribute.ID, "body");
-//                Element elem = doc.getDefaultRootElement().getElement(0);
                 doc.insertBeforeEnd(elem, newMessages);
                 getMessagesTextPane().setCaretPosition(doc.getLength());
             } catch (BadLocationException | IOException e) {

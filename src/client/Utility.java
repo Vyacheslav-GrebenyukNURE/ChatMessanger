@@ -20,12 +20,15 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import logic.Message;
 import logic.xml.MessageParser;
 
 public class Utility {
+    final static Logger LOGGER = LogManager.getFormatterLogger(Utility.class);
     public static <T extends Container> T findParent(Component comp, Class<T> clazz)  {
         if (comp == null)
            return null;
@@ -48,7 +51,7 @@ public class Utility {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         } catch (IOException e) {
-            System.err.println("Socket error");
+            LOGGER.error("Socket error");
             return;
         }
         String responseLine;
@@ -77,25 +80,17 @@ public class Utility {
             if (messages.size() > 0){                
                 model.addMessages(messages);
                 model.setLastMessageId(id.longValue());
-                System.out.println("List:" + messages.toString());                
+                LOGGER.info("List: " + messages.toString());                
                 ((ChatPanelView) appl.getChatPanelView(false)).modelChangedNotification(messages.toString());
             }
             in.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException | ParserConfigurationException | SAXException e) {
+            LOGGER.error("Parser exception", e.getMessage());
         } finally {
             try {
                 socket.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER.error("Socket error", e.getMessage());
             }
         }
     }
