@@ -2,7 +2,7 @@ package client;
 
 import java.util.Timer;
 
-public class ShowChatViewCommand implements Command {
+public class ShowChatViewCommand implements Command {    
     private ChatMessengerAppl appl;
     private AbstractView view;
 
@@ -17,7 +17,7 @@ public class ShowChatViewCommand implements Command {
         view.clearFields();
         view.setVisible(false);
         appl.setTimer(new Timer());
-        appl.getTimer().scheduleAtFixedRate(new UpdateMessageTask(appl), 500, 1000);
+        appl.getTimer().scheduleAtFixedRate(new UpdateMessageTask(appl), ChatMessengerAppl.DELAY, ChatMessengerAppl.PERIOD);
         appl.showChatPanelView();
     }  
 }

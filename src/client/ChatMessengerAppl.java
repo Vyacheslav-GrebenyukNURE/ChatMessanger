@@ -15,6 +15,8 @@ public class ChatMessengerAppl extends JFrame{
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 400;
     static final int PORT = 7070;
+    static final int PERIOD = 1000;
+    static final int DELAY = 100;
 
     private Model model;
     private Controller controller;
@@ -90,11 +92,11 @@ public class ChatMessengerAppl extends JFrame{
         return loginPanelView;
     }
     
-    JPanel getChatPanelView(boolean getMessages) {
+    JPanel getChatPanelView(boolean doGetMessages) {
         if (chatPanelView == null) {
             chatPanelView = new ChatPanelView(this);
         }
-        ((ChatPanelView) chatPanelView).initModel(getMessages);
+        ((ChatPanelView) chatPanelView).initModel(doGetMessages);
         return chatPanelView;
     }
     
