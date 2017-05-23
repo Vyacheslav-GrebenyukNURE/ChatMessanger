@@ -4,6 +4,6 @@
         receiver="viktor.kauk@nure.ua" sender="vyacheslav.grebenyuk@nure.ua">Привет!</message>
     <message id="2" moment="17:02:35 26-04-2017"
         receiver="vyacheslav.grebenyuk@nure.ua" sender="viktor.kauk@nure.ua">Здравствуй!</message>
-    <message id="3" moment="17:12:27 26-04-2017" receiver="" sender="vyacheslav.grebenyuk@nure.ua">Тестируем запись</message>
+    <message id="3" moment="17:12:27 26-04-2017" receiver="" sender="vyacheslav.grebenyuk@nure.ua">Тестируем запись</message>    
 </messages>
 
