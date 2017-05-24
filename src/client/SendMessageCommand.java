@@ -23,10 +23,13 @@ import logic.Message;
 import logic.xml.MessageBuilder;
 
 public class SendMessageCommand implements Command {
-    final static Logger LOGGER = LogManager.getFormatterLogger(SendMessageCommand.class);
+    final static Logger LOGGER = LogManager.getLogger(SendMessageCommand.class);
     private ChatMessengerAppl parent;
     private ChatPanelView view;
-    
+    private InetAddress addr;
+    private Socket socket;
+    private PrintWriter out;
+    private BufferedReader in;
 
     public SendMessageCommand(ChatMessengerAppl parent, ChatPanelView view) {
         this.parent = parent;
@@ -35,45 +38,38 @@ public class SendMessageCommand implements Command {
 
     @Override
     public void execute() {
-        // отправить сообщение на сервер
-        InetAddress addr;
-        Socket socket;
-        PrintWriter out;
-        BufferedReader in;
         try {
             addr = InetAddress.getByName(parent.getModel().getServerIPAddress());
             socket = new Socket(addr, ChatMessengerAppl.PORT);
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
-            LOGGER.error("Socket error:", e.getMessage());
+            LOGGER.error("Socket error: " + e.getMessage());
             return;
         }
         try {
             String result;
-            do{
+            do {
                 out.println("PUT");
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 Document document = builder.newDocument();
-                List<Message> messages = new ArrayList<Message>();
+                List<Message> messages = new ArrayList<>();
                 messages.add(
                         new Message(view.getTextMessageField().getText(),
                                 parent.getModel().getCurrentUser(), ""));
-                
                 String xmlContent = MessageBuilder.buildDocument(document, messages);
                 out.println(xmlContent);
                 out.println("END");
-                // Получить ОК
                 result = in.readLine();
-            } while (! "OK".equals(result));            
-        } catch (IOException | ParserConfigurationException e) {
-            LOGGER.error("Parser exception", e.getMessage());
+            } while (! "OK".equals(result));
+        } catch (ParserConfigurationException | IOException e) {
+            LOGGER.error("Send message error: " + e.getMessage());
         } finally {
             try {
                 socket.close();
-            } catch (IOException e) {
-                LOGGER.error("Socket error:", e.getMessage());
+            } catch  (IOException e) {
+                LOGGER.error("Socket close error: " + e.getMessage());
             }
         }
         view.getTextMessageField().setText("");

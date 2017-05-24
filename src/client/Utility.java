@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,7 +29,7 @@ import logic.Message;
 import logic.xml.MessageParser;
 
 public class Utility {
-    final static Logger LOGGER = LogManager.getFormatterLogger(Utility.class);
+    final static Logger LOGGER = LogManager.getLogger(Utility.class);
     public static <T extends Container> T findParent(Component comp, Class<T> clazz)  {
         if (comp == null)
            return null;
@@ -39,59 +40,51 @@ public class Utility {
     }
     
     public static void messagesUpdate(ChatMessengerAppl appl) {
-        // Запрос на обновление списка сохраненных на сервере сообщений
         InetAddress addr;
-        Socket socket;
-        PrintWriter out;
-        BufferedReader in;
         try {
             addr = InetAddress.getByName(appl.getModel().getServerIPAddress());
-            socket = new Socket(addr, ChatMessengerAppl.PORT);
-            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            try (Socket socket = new Socket(addr, ChatMessengerAppl.PORT);
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));){
+                Model model = appl.getModel();
+                out.println("GET");
+                out.println(model.getLastMessageId());
+                out.flush();
+                String requestLine = in.readLine();
+                StringBuilder mesStr = new StringBuilder();
+                while (! "END".equals(requestLine)) {
+                    mesStr.append(requestLine);
+                    requestLine = in.readLine();
+                }      
+                SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+                try {
+                    SAXParser parser = parserFactory.newSAXParser();
+                    List<Message> messages = new ArrayList<Message>() {
+                        private static final long serialVersionUID = 1L;
 
-        } catch (IOException e) {
-            LOGGER.error("Socket error");
-            return;
-        }
-        String responseLine;
-        try {
-            Model model = appl.getModel();
-            out.println("GET");
-            out.println(model.getLastMessageId());
-            out.flush();
-            responseLine = in.readLine();
-            StringBuilder mesStr = new StringBuilder();
-            while (! "END".equals(responseLine)) {
-                mesStr.append(responseLine);
-                responseLine = in.readLine();
-            }                   
-            SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-            SAXParser parser = parserFactory.newSAXParser();
-            List<Message> messages = new ArrayList<Message>(){
-                private static final long serialVersionUID = 1L;
-                @Override public String toString() {
-                    return this.stream().map(Message::toString).collect(Collectors.joining("\n"));
+                        @Override public String toString(){
+                            return this.stream().map(Message::toString).collect(Collectors.joining("\n"));
+                        }
+                    };
+                    AtomicInteger id = new AtomicInteger(0);
+                    MessageParser saxp = new MessageParser(id, messages);
+                    parser.parse(new ByteArrayInputStream(mesStr.toString().getBytes()), saxp);
+                    if (messages.size() > 0){
+                        model.addMessages(messages);
+                        model.setLastMessageId(id.longValue());
+                        LOGGER.trace("List of new messages: " + messages.toString());
+                        ((ChatPanelView) appl.getChatPanelView(false)).modelChangedNotification(messages.toString());
+                    }
+                } catch (ParserConfigurationException | SAXException e) {
+                    LOGGER.error("Parser exeption: " + e.getMessage());
                 }
-            };
-            AtomicInteger id  = new AtomicInteger(0);
-            MessageParser saxp = new MessageParser(id, messages);            
-            parser.parse(new ByteArrayInputStream(mesStr.toString().getBytes()), saxp);
-            if (messages.size() > 0){                
-                model.addMessages(messages);
-                model.setLastMessageId(id.longValue());
-                LOGGER.trace("List: " + messages.toString());                
-                ((ChatPanelView) appl.getChatPanelView(false)).modelChangedNotification(messages.toString());
-            }
-            in.close();
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            LOGGER.error("Parser exception", e.getMessage());
-        } finally {
-            try {
-                socket.close();
+                
             } catch (IOException e) {
-                LOGGER.error("Socket error", e.getMessage());
+                LOGGER.error("Socket error: " + e.getMessage());
+                return;
             }
+        } catch (UnknownHostException e1) {
+            LOGGER.error("Unknown host address: " + e1.getMessage());
         }
     }
 }

@@ -127,17 +127,17 @@ public class ChatPanelView extends AbstractView {
     }
 
     public void modelChangedNotification(String newMessages) {
-        if (newMessages.length() != 0){
-            LOGGER.trace("New messages: " + newMessages);
-            HTMLDocument doc = (HTMLDocument)getMessagesTextPane().getStyledDocument();
-            try {                            
-                Element elem = doc.getElement(doc.getRootElements()[0], HTML.Attribute.ID, "body");
-                doc.insertBeforeEnd(elem, newMessages);
-                getMessagesTextPane().setCaretPosition(doc.getLength());
-                LOGGER.trace("Text updated");
+        if (newMessages.length() != 0) {
+            LOGGER.trace("New messages:" + newMessages);
+            HTMLDocument document = (HTMLDocument) getMessagesTextPane().getStyledDocument();
+            Element elem = document.getElement(document.getRootElements()[0], HTML.Attribute.ID, "body");
+            try {
+                document.insertBeforeEnd(elem, newMessages);                
             } catch (BadLocationException | IOException e) {
-                LOGGER.error("Bad location error: ", e.getMessage());
+                LOGGER.error("Bad location error: " + e.getMessage());
             }
+            getMessagesTextPane().setCaretPosition(document.getLength());
+            LOGGER.trace("Messages text updated");
         }
     }
 }
