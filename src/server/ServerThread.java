@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -58,8 +59,9 @@ class ServerThread extends Thread {
                 Long lastId = Long.valueOf(in.readLine());
                 LOGGER.debug(lastId);
                 // Отфильтровать Java 8 Обработка коллекций лямбда-выражениями
-                List<Message> newMessages = messagesDB.values().stream()
-                        .filter(message -> message.getId().compareTo(lastId) > 0)
+                List<Message> newMessages = messagesDB.entrySet().stream()
+                        .filter(message -> message.getKey().compareTo(lastId) > 0)
+                        .map(Entry::getValue)
                         .collect(Collectors.toList());
                 LOGGER.debug(newMessages);
                 // Сформировать и отправить в out xml с сообщениями
