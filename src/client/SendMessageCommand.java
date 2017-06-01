@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -56,8 +57,14 @@ public class SendMessageCommand implements Command {
                 Document document = builder.newDocument();
                 List<Message> messages = new ArrayList<>();
                 messages.add(
-                        new Message(view.getTextMessageField().getText(),
-                                parent.getModel().getCurrentUser(), ""));
+                        Message.newMessage()
+                        .text(view.getTextMessageField().getText())
+                        .from(parent.getModel().getCurrentUser())
+                        .to("")
+                        .moment(Calendar.getInstance())
+                        .build());
+//                        new Message(view.getTextMessageField().getText(),
+//                                parent.getModel().getCurrentUser(), ""));
                 String xmlContent = MessageBuilder.buildDocument(document, messages);
                 out.println(xmlContent);
                 out.println("END");

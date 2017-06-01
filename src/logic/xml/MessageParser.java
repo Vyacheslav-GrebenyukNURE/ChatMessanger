@@ -17,7 +17,7 @@ import org.xml.sax.*;
 public class MessageParser extends DefaultHandler {
     final static Logger LOGGER = LogManager.getLogger(MessageParser.class);
     private String thisElement = "";
-    private Message message = new Message();
+    private Message message;
     private AtomicInteger id;
     private List<Message> messages;
 
@@ -37,7 +37,7 @@ public class MessageParser extends DefaultHandler {
         LOGGER.debug("startElement");
         LOGGER.trace("<" + qName);
         if ("message".equals(qName)){
-            message = new Message();
+            message = Message.newMessage().build();
             for (int i = 0; i < atts.getLength(); i++) {
                 String attrName = atts.getLocalName(i);
                 String value = atts.getValue(i);
@@ -71,7 +71,7 @@ public class MessageParser extends DefaultHandler {
     public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
         if ("message".equals(qName)){
             Long newId = Long.valueOf(id.getAndIncrement());
-            if (message.getId() == 0L){
+            if (message.getId() == null){
                 message.setId(newId);
             } else {
                 newId = message.getId();

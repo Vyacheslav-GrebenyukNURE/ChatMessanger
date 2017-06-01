@@ -4,118 +4,82 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * Message build includes the text of the message, the users' name from and to,
+ * the moment of message send and the unique id.
+ * Id must be generated on the server side.
+ * 
+ * Message bean realizes the fluent builder patter. See inner static class Builder.
+ *      @author Vyacheslav Grebenyuk
+ */
 public class Message implements Serializable, Comparable<Message> {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 5521915137203818381L;
+    private static final long serialVersionUID = 57618043172251503L;
     private Long id;
     private String text;
     private String userNameFrom, userNameTo;
     private Calendar moment;
 
-    /**
-     * @return the id
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * @param id
-     *            the id to set
-     */
     public void setId(Long id) {
         this.id = id;
     }
 
-    /**
-     * @return the text
-     */
     public String getText() {
         return text;
     }
 
-    /**
-     * @param text
-     *            the text to set
-     */
     public void setText(String text) {
         this.text = text;
     }
 
-    /**
-     * @return the userNameFrom
-     */
     public String getUserNameFrom() {
         return userNameFrom;
     }
 
-    /**
-     * @param userNameFrom
-     *            the userNameFrom to set
-     */
     public void setUserNameFrom(String userNameFrom) {
         this.userNameFrom = userNameFrom;
     }
 
-    /**
-     * @return the userNameTo
-     */
     public String getUserNameTo() {
         return userNameTo;
     }
 
-    /**
-     * @param userNameTo
-     *            the userNameTo to set
-     */
     public void setUserNameTo(String userNameTo) {
         this.userNameTo = userNameTo;
     }
 
-    /**
-     * @return the moment
-     */
     public Calendar getMoment() {
         return moment;
     }
 
-    /**
-     * @param moment
-     *            the moment to set
-     */
     public void setMoment(Calendar moment) {
         this.moment = moment;
     }
 
-    public Message(Long id, String text, String userNameFrom, String userNameTo, Calendar moment) {
-        super();
-        this.id = id;
-        this.text = text;
-        this.userNameFrom = userNameFrom;
-        this.userNameTo = userNameTo;
-        this.moment = moment;
-    }
-
-    public Message(String text, String userNameFrom, String userNameTo) {
-        super();
-        this.id = null;
-        this.text = text;
-        this.userNameFrom = userNameFrom;
-        this.userNameTo = userNameTo;
-        this.moment = Calendar.getInstance();
-    }
-
-    public Message() {
-        super();
-        this.id = 0L;
-        this.text = "";
-        this.userNameFrom = "";
-        this.userNameTo = "";
-        this.moment = Calendar.getInstance();
+    /**
+     * Both constructors may be used only by inner static class Builder
+     */
+    private Message() {
     }
    
+    private Message(Builder builder) {
+        setId(builder.id);
+        setText(builder.text);
+        setUserNameFrom(builder.userNameFrom);
+        setUserNameTo(builder.userNameTo);
+        setMoment(builder.moment);
+    }
+
+    /**
+     * Static builder method for fluient buider pattern
+     */
+    public static Builder newMessage() {
+        return new Builder();
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -200,4 +164,47 @@ public class Message implements Serializable, Comparable<Message> {
         return getMoment().compareTo(o.getMoment());
     }
 
+
+    /**
+     * Class Builder for Message bean is a fluent builder pattern
+     * @author Vyacheslav Grebenyuk
+     */
+    public static final class Builder {
+        private Long id;
+        private String text;
+        private String userNameFrom, userNameTo;
+        private Calendar moment;
+        
+        private Builder(){            
+        }
+        
+        public Builder id(Long id){
+            this.id = id;
+            return this;
+        }
+        
+        public Builder text(String text) {
+            this.text = text;
+            return this;
+        }
+        
+        public Builder from(String userNameFrom) {
+            this.userNameFrom = userNameFrom;
+            return this;            
+        }
+        
+        public Builder to(String userNameTo) {
+            this.userNameTo = userNameTo;
+            return this;
+        }
+        
+        public Builder moment(Calendar moment) {
+            this.moment = moment;
+            return this;
+        }
+        
+        public Message build(){
+            return new Message(this);
+        }
+    }
 }
