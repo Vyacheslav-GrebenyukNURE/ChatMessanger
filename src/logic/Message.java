@@ -74,7 +74,7 @@ public class Message implements Serializable, Comparable<Message> {
     }
 
     /**
-     * Static builder method for fluient buider pattern
+     * Static builder method for fluent builder pattern
      */
     public static Builder newMessage() {
         return new Builder();
