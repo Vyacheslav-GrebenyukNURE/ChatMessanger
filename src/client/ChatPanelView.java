@@ -33,11 +33,20 @@ public class ChatPanelView extends AbstractView {
     private JTextField textMessageField;
     private JButton logoutButton;
     
-    public ChatPanelView(ChatMessengerAppl chatMessageAppl) {
-        super(chatMessageAppl);
+    private ChatPanelView() {
+        super();
         initialize();
     }
 
+    public static ChatPanelView getInstance() {
+        return ChatPanelViewHolder.INSTANCE;
+    }
+
+    private static class ChatPanelViewHolder {
+        private static final ChatPanelView INSTANCE = new ChatPanelView();
+    }
+
+    
     @Override public void initialize() {
         this.setName("chatPanelView");
         this.setLayout(new BorderLayout());

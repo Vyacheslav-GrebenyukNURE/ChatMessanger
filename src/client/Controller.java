@@ -11,14 +11,21 @@ public class Controller implements ActionListener {
     private ChatMessengerAppl parent;
     private Command command;
 
-    public Controller(ChatMessengerAppl chatMessangerAppl) {
-        parent = chatMessangerAppl;
-        initialize();
+    private Controller() {     
     }
 
-    private void initialize() {
+    public static Controller getInstance() {
+        return ControllerHolder.INSTANCE;
     }
 
+    private static class ControllerHolder {
+        private static final Controller INSTANCE = new Controller();
+    }
+    
+    public void setParent(ChatMessengerAppl parent) {
+        this.parent = parent;
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
@@ -50,7 +57,7 @@ public class Controller implements ActionListener {
             break;
         case "logout": {
             ChatPanelView view = Utility.findParent((Component) e.getSource(), ChatPanelView.class);
-            parent.setModel(new Model());
+            parent.getModel().initialize();
             command = new ShowLoginViewCommand(parent, view);
         }
             break;

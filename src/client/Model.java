@@ -8,16 +8,31 @@ import java.util.TreeSet;
 import logic.Message;
 
 public class Model {
-    private String currentUser = "";
-    private String lastMessageText = "";
+    private ChatMessengerAppl parent;
+    private String currentUser;
+    private String lastMessageText;
     private Set<Message> messages;
     private Long lastMessageId;
 //    Замените адрес для тестов в аудитории во время занятий
     private String serverIPAddress="127.0.0.1";
 //    private String serverIPAddress="10.13.30.1";
     
-    public Model() {
-        super();
+    private Model() {     
+    }
+
+    public static Model getInstance() {
+        return ModelHolder.INSTANCE;
+    }
+
+    private static class ModelHolder {
+        private static final Model INSTANCE = new Model();
+    }
+    
+    public void setParent(ChatMessengerAppl parent) {
+        this.parent = parent;
+    }
+    
+    public void initialize() {
         setMessages(new TreeSet<Message>() {
             private static final long serialVersionUID = 1L;
 
@@ -31,43 +46,30 @@ public class Model {
             }
         });
         lastMessageId = 0L;
+        currentUser = "";
+        lastMessageText = "";
     }
     
-    /**
-     * @return the lastMessageId
-     */
     public Long getLastMessageId() {
         return lastMessageId;
     }
     
-    /**
-     * @param lastMessageId the lastMessageId to set
-     */
     public void setLastMessageId(Long lastMessageId) {
         this.lastMessageId = lastMessageId;
     }
     
-    /**
-     * @return the currentUser
-     */
     public String getCurrentUser() {
         return currentUser;
     }
-    /**
-     * @param currentUser the currentUser to set
-     */
+
     public void setCurrentUser(String currentUser) {
         this.currentUser = currentUser;
     }
-    /**
-     * @return the currentMessageText
-     */
+
     public String getLastMessageText() {
         return lastMessageText;
     }
-    /**
-     * @param currentMessageText the currentMessageText to set
-     */
+
     public void setLastMessageText(String currentMessageText) {
         this.lastMessageText = currentMessageText;
     }
@@ -80,22 +82,18 @@ public class Model {
         this.serverIPAddress = serverIPAddress;
     }
 
-    /**
-     * @return the messages in String
-     */
     public String messagesToString() {
         return getMessages().toString();
     }
-    /**
-     * @param messages the messages to add
-     */
+
     public void addMessages(List<Message> messages) {
         this.getMessages().addAll(messages);
+        ((ChatPanelView)parent.getChatPanelView(false)).modelChangedNotification(messages.toString());
     }
 
-    public void addMessage(Message message) {
-        this.getMessages().add(message);        
-    }
+//    public void addMessage(Message message) {
+//        this.getMessages().add(message);        
+//    }
 
     public Set<Message> getMessages() {
         return messages;

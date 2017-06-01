@@ -73,7 +73,6 @@ public class Utility {
                         model.addMessages(messages);
                         model.setLastMessageId(id.longValue());
                         LOGGER.trace("List of new messages: " + messages.toString());
-                        ((ChatPanelView) appl.getChatPanelView(false)).modelChangedNotification(messages.toString());
                     }
                 } catch (ParserConfigurationException | SAXException e) {
                     LOGGER.error("Parser exeption: " + e.getMessage());

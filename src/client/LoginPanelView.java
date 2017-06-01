@@ -11,10 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class LoginPanelView extends AbstractView{
-    /**
-     * 
-     */
+    final static Logger LOGGER = LogManager.getLogger(LoginPanelView.class);
+    
     private static final long serialVersionUID = -6308995713965796115L;    
     private JPanel loginPanel;
     private JPanel mainPanel;
@@ -22,9 +24,17 @@ public class LoginPanelView extends AbstractView{
     private JTextField userNameField;
     private JLabel errorLable;
 
-    public LoginPanelView(ChatMessengerAppl chatMessageAppl) {
-        super(chatMessageAppl);
+    private LoginPanelView() {
+        super();
         initialize();        
+    }
+    
+    public static LoginPanelView getInstance() {
+        return LoginPanelViewHolder.INSTANCE;
+    }
+
+    private static class LoginPanelViewHolder {
+        private static final LoginPanelView INSTANCE = new LoginPanelView();
     }
     
     @Override public void initialize() {

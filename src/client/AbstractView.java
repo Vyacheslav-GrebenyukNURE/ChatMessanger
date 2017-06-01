@@ -10,11 +10,14 @@ public abstract class AbstractView extends JPanel {
      * 
      */
     private static final long serialVersionUID = 1038391473871514638L;
-    protected ChatMessengerAppl parent;
+    protected static ChatMessengerAppl parent;
+    
+    protected static void setParent(ChatMessengerAppl parent) {
+        AbstractView.parent = parent;
+    }
 
-    public AbstractView(ChatMessengerAppl parent) {
+    public AbstractView() {
         super();
-        this.parent = parent;
     }
     
     public abstract void initialize();

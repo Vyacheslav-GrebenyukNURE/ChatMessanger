@@ -1,16 +1,17 @@
 package client;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.util.Timer;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ChatMessengerAppl extends JFrame{
-    /**
-     * 
-     */
+    final static Logger LOGGER = LogManager.getLogger();
+    
     private static final long serialVersionUID = 6486409443796464545L;
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 400;
@@ -18,12 +19,17 @@ public class ChatMessengerAppl extends JFrame{
     static final int PERIOD = 1000;
     static final int DELAY = 100;
 
-    private Model model;
-    private Controller controller;
-    private JPanel contentPanel;
-    private AbstractView loginPanelView;
-    private AbstractView chatPanelView;
-    private Timer timer; 
+    private static final Model MODEL;
+    private static final Controller CONTROLLER;
+    private static final ViewFactory VIEWS;
+    private Timer timer;
+    
+    static {
+        MODEL = Model.getInstance();
+        CONTROLLER = Controller.getInstance();
+        VIEWS = ViewFactory.getInstance();
+        LOGGER.trace("MVC instantiated", MODEL, CONTROLLER, VIEWS);
+    }
 
     public ChatMessengerAppl() {
         super();
@@ -37,69 +43,31 @@ public class ChatMessengerAppl extends JFrame{
     }
 
     private void initialize() {
-        model = new Model();
-        controller = new Controller(this);
+        AbstractView.setParent(this);
+        MODEL.setParent(this);
+        MODEL.initialize();
+        CONTROLLER.setParent(this);
+        VIEWS.viewRegister("login", LoginPanelView.getInstance());
+        VIEWS.viewRegister("chat", ChatPanelView.getInstance());
         timer = new Timer("Server request for update messages");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         this.setLocationRelativeTo(null);
-        this.setTitle("Chat Messanger"); 
-        this.setContentPane(getContentPanel());
+        this.setTitle("Chat Messenger");
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.add(getLoginPanelView(), BorderLayout.CENTER);
+        this.setContentPane(contentPanel);
     }
 
-    /**
-     * @return the model
-     */
     public Model getModel() {
-        return model;
+        return MODEL;
     }
 
-    /**
-     * @param model the model to set
-     */
-    public void setModel(Model model) {
-        this.model = model;
-    }
-
-    /**
-     * @return the controller
-     */
     public Controller getController() {
-        return controller;
+        return CONTROLLER;
     }
 
-    /**
-     * @param controller the controller to set
-     */
-    public void setController(Controller controller) {
-        this.controller = controller;
-    }
-
-    private Container getContentPanel() {
-        if (contentPanel == null) {
-            contentPanel = new JPanel();
-            contentPanel.setLayout(new BorderLayout());
-            contentPanel.add(getLoginPanelView(), BorderLayout.CENTER);
-        }
-        return contentPanel;
-    }
-
-    private JPanel getLoginPanelView() {
-        if (loginPanelView == null) {
-            loginPanelView = new LoginPanelView(this);
-        }
-        ((LoginPanelView) loginPanelView).initModel();
-        return loginPanelView;
-    }
-    
-    JPanel getChatPanelView(boolean doGetMessages) {
-        if (chatPanelView == null) {
-            chatPanelView = new ChatPanelView(this);
-        }
-        ((ChatPanelView) chatPanelView).initModel(doGetMessages);
-        return chatPanelView;
-    }
-    
     public Timer getTimer() {
         return timer;
     }
@@ -107,6 +75,18 @@ public class ChatMessengerAppl extends JFrame{
     public void setTimer(Timer timer) {
         this.timer = timer;
     }    
+
+    private JPanel getLoginPanelView() {        
+        LoginPanelView loginPanelView = VIEWS.getView("login");
+        loginPanelView.initModel();
+        return loginPanelView;
+    }
+    
+    JPanel getChatPanelView(boolean doGetMessages) {
+        ChatPanelView chatPanelView = VIEWS.getView("chat");
+        chatPanelView.initModel(doGetMessages);
+        return chatPanelView;
+    }
 
     private void showPanel(JPanel panel) {
         getContentPane().add(panel, BorderLayout.CENTER);
